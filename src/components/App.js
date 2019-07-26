@@ -12,22 +12,26 @@ class App extends Component {
       {
         name: "Guil",
         id: 1,
-        score: 0
+        score: 0,
+        isHighScore: false
       },
       {
         name: "Treasure",
         id: 2,
-        score: 0
+        score: 0,
+        isHighScore: false
       },
       {
         name: "Ashley",
         id: 3,
-        score: 0
+        score: 0,
+        isHighScore: false
       },
       {
         name: "James",
         id: 4,
-        score: 0
+        score: 0,
+        isHighScore: false
       }
     ]
   };
@@ -47,7 +51,8 @@ class App extends Component {
           ...this.state.players, {
             name,
             score: 0,
-            id: this.prevId+=1
+            id: this.prevId+=1,
+            isHighScore: false
           }
         ]
       }
@@ -55,10 +60,27 @@ class App extends Component {
     })
   }
   changeScore = (index, delta) => {
-    this.setState( prevState => ({
-      players: prevState.players[index].score+=delta
-    }));
+    this.setState( prevState => {
+      return{
+        players: prevState.players[index].score+=delta
+      }
+    });
     console.log(delta);
+  }
+  handleHighScore = () => {
+    let players = this.state.players;
+    let highScore = Math.max.apply(Math,array.map(o => o.score))
+    let highScorePlayers = players.filter(obj => {
+      return obj.score === highScore;
+    })
+    for(player of highScorePlayers) {
+      this.setState(prevState => {
+        return{
+          isHighScore: true
+        }
+      })
+    }
+
   }
 
 
@@ -80,6 +102,7 @@ class App extends Component {
             removePlayer={this.handleRemovePlayer}
             changeScore={this.changeScore}
             index={index}
+            isHighScore={this.isHighScore}
           />
         )}
         <AddPlayerForm addPlayer={this.state.handleAddPlayer}/>
